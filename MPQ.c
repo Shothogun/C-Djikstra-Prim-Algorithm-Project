@@ -1,29 +1,37 @@
 #include <stdio.h>
+#include <limits.h>
+#include <stdlib.h>
 #include "MPQ.h"
+#include "Graph.h"
 
-Heap_node* Parent(Type_Heap* A, int i)
+Heap_node* Parent(Type_Heap* A, unsigned int i)
 {
 	return &(A->MPQ[(i-1)/2]);
 }
 
-Heap_node* Left(Type_Heap* A, int i)
+Heap_node* Left(Type_Heap* A,unsigned int i)
 {
 	return &(A->MPQ[2*i+1]);
 }
 
-Heap_node* Right(Type_Heap* A, int i)
+Heap_node* Right(Type_Heap* A, unsigned int i)
 {
 	return &(A->MPQ[2*i+2]);
 }
 
-void swap(Heap_node* x, Heap_node* y)
+void swap(Type_Heap* Q, Heap_node* x, Heap_node* y)
 {
-	Heap_node aux = *x;
+	Heap_node aux1 = *x;
 	*x = *y;
-	*y = aux;
+	*y = aux1;
+
+	//Update positions in queue
+	unsigned int aux2 = Q->position[x->id];
+	Q->position[x->id] = Q->position[y->id];
+	Q->position[y->id] = aux2;
 }
 
-void Min_heapify(Type_Heap* A, int i)
+void Min_heapify(Type_Heap* A, unsigned int i)
 {
 	int min;
 	int l = 2*i+1; 
@@ -52,7 +60,7 @@ void Min_heapify(Type_Heap* A, int i)
  	}
  	if (min != i)
  	{
- 		swap(&A->MPQ[i], &A->MPQ[min]);
+ 		swap(A ,&A->MPQ[i], &A->MPQ[min]);
  		Min_heapify(A, min);
  	}
 }
@@ -77,9 +85,30 @@ int Extract_min(Type_Heap* A){
 	return root;
 }
 
-Type_Heap* MPQ_creator(Graph G)
-{
+Type_Heap* MPQ_creator(Graph G, unsigned int r)
+{	
+	Type_Heap *Q;
+	Q->size = G.size;
+	Q->MPQ = (Heap_node*) malloc(Q->size*sizeof(Heap_node));
 
+	for(int i=0; i<Q->size; i++)
+	{
+		Q->MPQ[i].key = G.Vertex[i].key;
+		Q->MPQ[i].id = i;
+		Q->position[i] = i;
+	}
 
+	swap(Q, &Q->MPQ[0], &Q->MPQ[r]);
 }
 
+void Decrease_key(Type_Heap *Q, int i, int new_val)
+{
+	Q->MPQ[i].key = new_val;
+	// Operates while ith is not root and parent is greater than son
+	while(i!=0 && Q->MPQ[(i-1)/2].key > Q->MPQ[i].key)
+	{
+		swap(Q , &Q->MPQ[i], &Q->MPQ[(i-1/2)]);
+		i = (i-1)/2;
+	}
+
+}
