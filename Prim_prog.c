@@ -10,7 +10,7 @@ void MST_Prim(Graph* G, unsigned int r){
 	Type heap *Q = MPQ_creator(G);
 	while (Q->size != 0)
 	{
-		i = Extract_min(Q)
+		int i = Extract_min(Q)
 		B_queue[i] = 0;
 		List *u = G->Vertex[i]
 		for(List_Node *v = u->head->next; *v != NULL; *v = v->next)
@@ -20,6 +20,7 @@ void MST_Prim(Graph* G, unsigned int r){
 			{
 				G->Vertex[v->id].pi = i;
 				G->Vertex[v->id].key = v->WT;
+				Decrease_key(Q, position[v->id], v->WT);
 			}
 		}
 	}
