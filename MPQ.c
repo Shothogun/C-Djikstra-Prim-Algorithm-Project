@@ -77,3 +77,9 @@ int Extract_min(Type_Heap* A){
 	return root;
 }
 
+Type_Heap* MPQ_creator(Graph G)
+{
+
+
+}
+
