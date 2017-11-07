@@ -24,6 +24,7 @@ Heap_node* Right(Type_Heap* A, int i);
 void swap(Heap_node* x, Heap_node* y);
 void Min_heapify(Type_Heap* A, int i);
 int Extract_min(Type_Heap* A);
+Type_Heap* MPQ_creator(Graph G);
 
 
 
