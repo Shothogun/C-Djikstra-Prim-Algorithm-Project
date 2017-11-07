@@ -1,6 +1,6 @@
 #ifndef MPQ_H
 #define MPQ_H
-#include "graph.h"
+#include "Graph.h"
 
 typedef struct Heap_node *Pointer;
 
