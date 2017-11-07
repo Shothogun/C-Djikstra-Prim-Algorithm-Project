@@ -78,7 +78,8 @@ int Extract_min(Type_Heap* A){
 	}
 
 	int root = A->MPQ[0].id;
-	A->MPQ[0] = A->MPQ[A->size-1]; 
+	A->MPQ[0] = A->MPQ[A->size-1];
+	A->position[A->MPQ[A->size-1].id] = 0; 
 	A->size--;
 	Min_heapify(A, 0);
 
