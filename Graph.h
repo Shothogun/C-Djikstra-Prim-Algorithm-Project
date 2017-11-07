@@ -1,5 +1,6 @@
 #ifndef GRAPH_H
 #define GRAPH_H
+#include "MPQ.h"
 
 typedef struct List_Node *Adj;
 
@@ -8,24 +9,32 @@ typedef struct List_Node
 {
 	Adj next;
 	//Vertex identification
-	int id;
+	unsigned int id;
 	//Edge's weight
-	int WT;
+	unsigned int WT;
 } List_Node;
 
-//List of adjacents vertices
+//List of adjacents vertices from a ith vertex
 typedef struct List
 {
-	Adj head;			
+	// Node head
+	Adj head;
+	//Vertex's key	
+	unsigned int key;
+	//Vertex's father
+	int pi;	
 } List;
 
 typedef struct Graph
 {	
 	//Graph's size
-	int N;		
+	unsigned int size;		
 	//Graph's Vertices		
 	List* Vertex;
-	//Distance to source
-	int* Dist;
+	// Queue's 
+	short* B_queue; 
 } Graph;
+
+void Init_sng_src(Graph* G);
+
 #endif
