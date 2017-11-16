@@ -55,25 +55,6 @@ void Min_heapify(Type_Heap* A, unsigned int i)
  		min = r;
  	}
 
- 	// Heapify about id
- 	if(l <= A->size && 
-		(L->key) == (A->MPQ[i].key) && 
-		L->id < (A->MPQ[i].id)) 
- 	{
- 		min = l;
-
- 	}
- 	else
- 	{
- 		min = i;
- 	}
- 	if(r <= A->size && 
- 		R->key < (A->MPQ[min].key) &&
- 		R->id < (A->MPQ[i].id))
- 	{
- 		min = r;
- 	}
-
  	if (min != i)
  	{
  		swap(A ,&A->MPQ[i], &A->MPQ[min]);
@@ -106,6 +87,7 @@ int Extract_min(Type_Heap* A){
 void Decrease_key(Type_Heap *Q, int i, double new_val)
 {
 	Q->MPQ[i].key = new_val;
+
 	// Operates while ith is not root and parent is greater than son
 	while(i!=0 && Q->MPQ[(i-1)/2].key > Q->MPQ[i].key)
 	{
@@ -117,6 +99,7 @@ void Decrease_key(Type_Heap *Q, int i, double new_val)
 
 void Init_sng_src(Graph* G)
 {
+	// Vertices's key, parent and B_queue initialization 
 	for(unsigned int i=0; i < (G->size); i++)
 	{
 		G->B_queue[i] = 1; 
@@ -126,7 +109,9 @@ void Init_sng_src(Graph* G)
 }
 
 Graph* Init_graph(unsigned int size)
-{		
+{	
+	// Graph's memory creation and node_head setting from List_Node for each element of array Vertex
+
 	Graph* G = (Graph*) malloc(sizeof(Graph));
 	G->size = size;
 	G->B_queue = (short*) malloc(size*sizeof(short));
@@ -156,7 +141,7 @@ void Graph_updater(Graph* G,
 	G->Vertex[v1-1].last->next = NULL;
 
 	//For vertex 2
-
+	
 	G->Vertex[v2-1].last->next = (List_Node*) malloc(sizeof(List_Node));
 	G->Vertex[v2-1].last = G->Vertex[v2-1].last->next;
 	G->Vertex[v2-1].last->id = v1;
@@ -171,7 +156,7 @@ Type_Heap* MPQ_creator(Graph* G, unsigned int r)
 	Type_Heap *Q = (Type_Heap*) malloc(sizeof(Type_Heap));
 	Q->size = G->size;
 	Q->MPQ = (Heap_node*) malloc(Q->size*sizeof(Heap_node));
-	Q->position = (unsigned int*) malloc(Q->size*sizeof(int));
+	Q->position = (unsigned int*) malloc(Q->size*sizeof(unsigned int));
 
 	for(unsigned int i=0; i<Q->size; i++)
 	{
@@ -190,6 +175,7 @@ void Free_graph(Graph *G)
 	for(unsigned int i=0; i<G->size; i++){
 		List_Node *Aux = G->Vertex[i].head;
 		List_Node *next;
+		// Free Vertex's linked list
 		while(Aux != NULL){
 			next = Aux->next;
 			free(Aux);
@@ -197,8 +183,11 @@ void Free_graph(Graph *G)
 		}
 		free(Aux);
 	}
+	//Free Vertex array
 	free(G->Vertex);
+	//Free B_queue array
 	free(G->B_queue);
+	//Free G Graph
 	free(G);
 }
 
