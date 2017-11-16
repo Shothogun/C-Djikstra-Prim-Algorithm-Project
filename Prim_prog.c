@@ -11,7 +11,6 @@ void MST_Prim(Graph* G, unsigned int r){
 	while (Q->size != 0)
 	{
 		int i = Extract_min(Q);
-		Min_heapify(Q,0);
 		G->B_queue[i-1] = 0;
 		List *u = &G->Vertex[i-1];
 		for(List_Node *v = u->head->next; v != NULL; v = v->next)
@@ -22,7 +21,6 @@ void MST_Prim(Graph* G, unsigned int r){
 				G->Vertex[v->id-1].pi = i;
 				G->Vertex[v->id-1].key = v->WT;
 				Decrease_key(Q, Q->position[v->id-1], v->WT);
-				Min_heapify(Q,0);
 			}
 		}
 	}
