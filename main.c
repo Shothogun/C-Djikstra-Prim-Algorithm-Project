@@ -1,37 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Prim_prog.h"
 #include "Graph.h"
+#include "IO.h"
 
 int main(int argc, char* argv[]){
-	unsigned int size, v1, v2;
-	double w;
-	
-	unsigned int r = 7;
+	int flag;
 
-	//scanf("%u%*c", &r);
+	double weight = 0;
+
+	unsigned int size;
+	
+	unsigned int r = 1;
 
 	scanf("%u%*c", &size);
 
 	Graph *G = Init_graph(size);
 
-	while( scanf("%u %u %lf", &v1, &v2, &w) == 3)
-	{
-		Graph_updater(G, v1, v2, w);
-	}
-
+	flag = read(G);
 
 	MST_Prim(G, r);
-
-	for(int i=0; i<size; i++)
-	{
-		for(List_Node *v = G->Vertex[i].head->next ; v != NULL; v = v->next)
-		{
-			printf("Vertice (%u) adj (%u) w (%lf)\n", i+1, v->id, v->WT);
-		}
-		printf("parent (%u)\n", G->Vertex[i].pi);
-	}
 	
+	print_MST(G, r, &weight);
+	printf("Peso Total:%lf\n", weight);
+
+
 	Free_graph(G);
 
 	return 0;
