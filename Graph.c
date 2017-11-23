@@ -147,7 +147,7 @@ void Graph_updater(Graph* G,
 	G->Vertex[v2-1].last->id = v1;
 	G->Vertex[v2-1].last->WT = w;
 	G->Vertex[v2-1].last->next = NULL;
-
+	
 }
 
 // Turns Graph to Min prior queue
