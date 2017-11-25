@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Freq_prog.h"
 #include "Dijkstra_prog.h"
 #include "Prim_prog.h"
 #include "Graph.h"
 #include "IO.h"
-	
+
+// Main program (argc and argv as parameter, used for reading)
 int main(int argc, char* argv[]){
+
 	// Negative weight edge flag
 	int flag;
 	
@@ -17,13 +20,20 @@ int main(int argc, char* argv[]){
 	unsigned int size;
 	
 	//Root's index
-	unsigned int r = atoi(argv[2]);
+	unsigned int r;
+
+	/*Verify command type
+	(if program get less than two commands in terminal for frequence
+	 , it don't uses source index)*/
+	if ( argc > 2){
+		r = atoi(argv[2]);
+	}
 
 	// Second Vertice from distance
 	unsigned int end = 0;
 	
 	/* Verify commnad type(if number of commands greater than 3  
-	in terminal, the program set secpnd vertex's index for distance computation, 
+	in terminal, the program set end vertex's index for distance computation, 
 	else program doesn't computes distance).
 	*/
 	
@@ -50,8 +60,10 @@ int main(int argc, char* argv[]){
 		}
 		// Computes Short-path tree
 		Dijkstra(G, r);
+
 		// Prints distance from source to end Vertex
 		print_distance(G, end);
+
 		// Prints total distance between both vertices
 		printf("Distancia:%lf\n", G->Vertex[end-1].key);
 	}
@@ -59,15 +71,24 @@ int main(int argc, char* argv[]){
 	{
 		// Computes Minimum spanning tree
 		MST_Prim(G, r);
+
 		// Prints M.S.T.
 		print_MST(G, r, &weight);
+
 		// Prints tree's weight
 		printf("Peso Total:%lf\n", weight);
 				
 	}
 	else if (strcmp(argv[1], "Freq") == 0)
 	{
+		// Combination of v vertices
+		unsigned int total = (G->size)*(G->size-1)/2;
 
+		// Creates histogram
+		DFD_List* dfd_list = Freq (G->size, G);
+
+		//Frequence printing
+		printFreq(dfd_list, total);
 	}
 	else
 	{
