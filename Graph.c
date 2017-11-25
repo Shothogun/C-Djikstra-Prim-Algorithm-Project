@@ -32,7 +32,7 @@ void swap(Type_Heap* Q, Heap_node* x, Heap_node* y)
 	Q->position[y->id-1] = aux2;
 }
 
-// Heapfy the modified heap
+// Heapify the modified heap
 void Min_heapify(Type_Heap* A, unsigned int i)
 {
 	// Calculation with root equals 0
@@ -60,6 +60,7 @@ void Min_heapify(Type_Heap* A, unsigned int i)
 
  	if (min != i)
  	{
+ 		// Swap parent and son
  		swap(A ,&A->MPQ[i], &A->MPQ[min]);
  		// Heapify son's heap
  		Min_heapify(A, min);
@@ -73,6 +74,7 @@ int Extract_min(Type_Heap* A){
 	{
 		return -1;
 	}
+
 	//  if there's only one remained
 	if(A->size == 1)
 	{
@@ -107,6 +109,7 @@ void Decrease_key(Type_Heap *Q, int i, double new_val)
 	// Operates while ith is not root and parent is greater than son
 	while(i!=0 && Q->MPQ[(i-1)/2].key > Q->MPQ[i].key)
 	{
+		// Swap parent and son
 		swap(Q , &Q->MPQ[i], &Q->MPQ[(i-1)/2]);
 
 		//Acces parent node 
@@ -145,10 +148,11 @@ Graph* Init_graph(unsigned int size)
 		G->Vertex[i].last = G->Vertex[i].head;
 	}
 
+	// Return the new graph
 	return G;
 }
 
-// Edge's updating subroutine
+// Edge's updating subroutine in linked list
 void Graph_updater(Graph* G, 
 				   unsigned int v1,
 				   unsigned int v2,
@@ -182,7 +186,7 @@ Type_Heap* MPQ_creator(Graph* G, unsigned int r)
 	Q->position = (unsigned int*) malloc(Q->size*sizeof(unsigned int));
 
 	/* Set each vertex in queue's
-	(each vertex which index is 
+	(each vertex which id is 
 	the same as its position in the queue, at beginning)*/
 
 	for(unsigned int i=0; i<Q->size; i++)
@@ -195,6 +199,7 @@ Type_Heap* MPQ_creator(Graph* G, unsigned int r)
 	// Set algorithm's source as queue's root
 	swap(Q, &Q->MPQ[0], &Q->MPQ[r-1]);
 
+	// Return queue created
 	return Q;
 }
 
