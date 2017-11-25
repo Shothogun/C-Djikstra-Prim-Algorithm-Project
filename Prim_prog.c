@@ -5,6 +5,7 @@
 #include "Graph.h"
 
 void MST_Prim(Graph* G, unsigned int r){
+
 	// Set keys and parents to initial condition
 	Init_sng_src(G);
 	
@@ -17,7 +18,7 @@ void MST_Prim(Graph* G, unsigned int r){
 	// Main loop(until all vertices are analyzed)
 	while (Q->size != 0)
 	{
-		// Extract min key vertex from queue returning its index
+		// Extract min key vertex from queue returning its id
 		int i = Extract_min(Q);
 		
 		// Set vertex's flag as out of queue
@@ -44,5 +45,6 @@ void MST_Prim(Graph* G, unsigned int r){
 		}
 	}
 
+	// Queue free
 	Free_queue(Q);
 } 
