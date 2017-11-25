@@ -1,38 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "Graph.h"
 #include "Freq_prog.h"
-#include "Dijktra_prog.h"
+#include "Dijkstra_prog.h"
 
-
-void Create_DFD_List (DFD_List* l) //Recebe uma variável dfd_list de aluNodes por referência a fim de criar a sua célula cabeça.
+// DFD_list creator algorithm
+void Create_DFD_List (DFD_List* l) 
 {
+	// Graphs allocation and initialization of head node
 	l->first = (Node*) malloc (sizeof (Node));
-	l->first->next = NULL; //Aterra os ponteiros da dfd_list.
+	// Set head node next to NULL
+	l->first->next = NULL; 
 	l->last = l->first;
 }
 
-int If_DFD_List_Empty (DFD_List* l) //Recebe uma dfd_list de aluNodes por refêrência para verificar se ela está vazia.
+//DFDL_list empty verifier 
+int If_DFD_List_Empty (DFD_List* l) 
 {					
-	if (l->first->next==NULL) //Verifica se a célula cabeça está aterrada.
+	if (l->first->next==NULL) 
 		return 1;
 	else
 		return 0;
 }
 
-void Insert_Node (DFD_List* l, double distance) //Recebe uma dfd_list de aluNodes por referência e uma variável que contém os dados do aluNode a ser inserido.
+// Insertion DFD_list algorithm
+void Insert_Node (DFD_List* l, double distance) 
 {
-	l->last->next = (Node*) malloc (sizeof(Node)); //Aloca um espaço para o Nodevo aluNode.
-	l->last = l->last->next; //Adiciona um aluNode Node final da dfd_list
+	// New Node memory allocation and insertion in the last of list
+	l->last->next = (Node*) malloc (sizeof(Node)); 
+	l->last = l->last->next; 
 	l->last->counter = 1;
 	l->last->dist = distance;
-	l->last->next = NULL; //Aterra o final da dfd_list
+	l->last->next = NULL; 
 }
 
-int Remove_Node (DFD_List* l, double distance) //Recebe uma dfd_list de aluNodes por referência e a chave do aluNode a ser retirado.
+// Removal DFD_list algorithm
+int Remove_Node (DFD_List* l, double distance) 
 {
 	Node *ant;
 	Node *rmv = l->first->next;
 	if (If_DFD_List_Empty(l))
 		return 1; 
-	while (rmv->dist != distance) //Percorre toda a dfd_list a procura da chave dada
+	// Seeks node with the distance given
+	while (rmv->dist != distance) 
 	{
 		ant = rmv;
 		if (rmv->next != NULL)
@@ -40,49 +50,87 @@ int Remove_Node (DFD_List* l, double distance) //Recebe uma dfd_list de aluNodes
 		else
 			return 1;
 	}
-	ant->next = rmv->next; //Remove o aluNode de chave k.
+
+	// Node removal
+	ant->next = rmv->next; 
 	free (rmv);
 	return 0;
 }
 
-void Delete_DFD_List (DFD_List* l) //Recebe uma dfd_list de aluNodes como parâmetro por referência a fim de desalocar todos os espaços alocados.
+// DFD_list desalocation
+void Delete_DFD_List (DFD_List* l) 
 {
 	Node *aux;
-	while (!If_DFD_List_Empty(l)) //Percorre toda a dfd_list removendo e desalocando todos os seus elementos.
+	// Access each node and free it
+	while (!If_DFD_List_Empty(l))
 	{
 		aux = l->first->next;
 		l->first->next = aux->next;
 		free(aux);
 	}
-	free (l->first); //Desaloca a célula cabeça da dfd_list.
+	// Head_node desalocation
+	free (l->first); 
 }
 
 DFD_List* Freq (unsigned int N, Graph* G)
 {
+	// Parameters initialization
 	unsigned int i, j;
 	Node* aux;
-	DFD_List dfd_list;
-	Create_DFD_List (&dfd_list);
-	for (i=1; i<N; i++)
+	DFD_List* dfd_list = (DFD_List*) malloc(sizeof(DFD_List));
+
+	//DFD_list creation
+	Create_DFD_List (dfd_list);
+
+	// Access each vertex from graph 
+	for (i=1; i<=N; i++)
 	{
+		// Do Dijkstra algorithm for current vertex from loop as source
 		Dijkstra(G, i);
-		for(j = i; j<N; j++)
+
+		/* Access each vertex pair of vertex whose distance between  
+		 vertex i haven't been analysed*/
+
+		for(j = i; j<=N; j++)
 		{	
-			aux = dfd_list.first;
+			/* Access each node from dfd_list
+			 and verifies if its value is already 
+			 registered */
+
+			aux = dfd_list->first; 
 			while(aux->next != NULL)
 			{
 				aux=aux->next;
-				if (aux->dist == G->Vertex[j].key)
+
+				// Updates distance occurrence, with counter
+				if (aux->dist == G->Vertex[j-1].key)
 				{
 					aux->counter += 1;
 					break;
 				}
 			}
+
+			// If this distance hasn't been occurred, it's inserted in list
 			if (aux->next == NULL)
 			{
-				Insert_Node (&dfd_list, G->Vertex[j].key);
+				Insert_Node (dfd_list, G->Vertex[j-1].key);
 			}
 		}
 	}
-	return &dfd_list;	
+	return dfd_list;	
+}
+
+// DFD free
+void freeDFD(DFD_List* dfd_list)
+{
+	Node* Aux= dfd_list->first;
+	Node* next;
+	while(Aux != NULL)
+	{
+		next = Aux->next;
+		free(Aux);
+		Aux = next;
+	}
+	free(Aux);
+	free(dfd_list);	
 }
