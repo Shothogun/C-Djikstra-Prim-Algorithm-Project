@@ -5,12 +5,13 @@
 #include "Freq_prog.h"
 #include "IO.h"
 
-// Reading subroutine
+// Reading subroutine 		
+
 int read(Graph *G)
 {
 	int flag = 0;
 
-	// Vertex index
+	// Vertex id
 	unsigned int v1, v2;
 
 	// Edge's weight
@@ -29,7 +30,8 @@ int read(Graph *G)
 	return flag;
 }
 
-// MST printing
+// MST printing			
+
 void print_MST(Graph* G, unsigned int i, double* weight)
 {	
 	// Seek vertex's parent 
@@ -50,11 +52,13 @@ void print_MST(Graph* G, unsigned int i, double* weight)
 	}
 }
 
-// Distance path printing
+// Distance path printing		
+
 void print_distance(Graph *G, unsigned int end)
 {
 	// Stop condition (reach root)
-	if(G->Vertex[end-1].pi == 0){
+	if(G->Vertex[end-1].pi == 0)
+	{
 		return;
 	}
 
@@ -74,7 +78,8 @@ void print_distance(Graph *G, unsigned int end)
 		    			   	weight);
 }
 
-// Distances and its frequences printing
+// Distances and its frequences printing		
+
 void printFreq(DFD_List* List, unsigned int Total)
 {
 	printf("Distance Frequence\n");
