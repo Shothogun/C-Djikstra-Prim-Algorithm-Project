@@ -2,16 +2,20 @@
 #define GRAPH_H
 
 // Graph
+
 typedef struct List_Node *Adj;
 
 //Adj vertice information
 typedef struct List_Node
 {
 	Adj next;
+
 	//Vertex identification
 	unsigned int id;
+
 	//Edge's weight
 	double WT;
+
 } List_Node;
 
 //List of adjacents vertices from a ith vertex
@@ -19,22 +23,29 @@ typedef struct List
 {
 	// Node head
 	Adj head;
+
 	// Last node
 	Adj last;
+
 	//Vertex's key	
 	double key;
+
 	//Vertex's father
 	unsigned int pi;	
+
 } List;
 
 typedef struct Graph
 {	
 	//Graph's size
-	unsigned int size;		
+	unsigned int size;	
+
 	//Graph's Vertices(array)		
 	List* Vertex;
+
 	// Vertex's belongs to queue indicator(array)
 	short* B_queue; 
+
 } Graph;
 
 //-------------------------------------------------------
@@ -46,18 +57,23 @@ typedef struct Heap_node
 {
 	//Vertex identification
 	unsigned int id;
+
 	//Edge's weight
 	double key;
+
 } Heap_node;
 
 typedef struct Type_Heap
 {
 	// Vertices array(array)
 	Heap_node* MPQ;
+
 	// Size of queue
 	unsigned int size;
+
 	// Vertex position in queue(array)
 	unsigned int* position;
+	
 } Type_Heap;
 
 
