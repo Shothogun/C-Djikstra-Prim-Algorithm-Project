@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "Graph.h"
 
+// Nodes returning
 Heap_node* Parent(Type_Heap* A, unsigned int i)
 {
 	return &(A->MPQ[(i-1)/2]);
@@ -18,6 +19,7 @@ Heap_node* Right(Type_Heap* A, unsigned int i)
 	return &(A->MPQ[2*i+2]);
 }
 
+// Swaping subroutine
 void swap(Type_Heap* Q, Heap_node* x, Heap_node* y)
 {
 	Heap_node aux1 = *x;
@@ -30,9 +32,10 @@ void swap(Type_Heap* Q, Heap_node* x, Heap_node* y)
 	Q->position[y->id-1] = aux2;
 }
 
+// Heapfy the modified heap
 void Min_heapify(Type_Heap* A, unsigned int i)
 {
-
+	// Calculation with root equals 0
 	unsigned int l = 2*i+1, min; 
 	unsigned int r = 2*i+2;
 	Heap_node *R = Right(A,i);
@@ -58,32 +61,45 @@ void Min_heapify(Type_Heap* A, unsigned int i)
  	if (min != i)
  	{
  		swap(A ,&A->MPQ[i], &A->MPQ[min]);
+ 		// Heapify son's heap
  		Min_heapify(A, min);
 	}
 }
 
+// Get min weighted node
 int Extract_min(Type_Heap* A){
+	// if there's nothing remained
 	if(A->size <= 0)
 	{
 		return -1;
 	}
+	//  if there's only one remained
 	if(A->size == 1)
 	{
 		A->size--;
 		return A->MPQ[0].id;
 	}
 
+	// Set min weightevertex's id 
 	int root = A->MPQ[0].id;
+
+	// Set last vertex from queue to root
 	A->MPQ[0] = A->MPQ[A->size-1]; 
+
+	// Set last vertex position in queue  
 	A->position[A->MPQ[A->size-1].id-1] = 0; 
+
+	// Decrease Heap size
 	A->size--;
+
+	// Heapifying 
 	Min_heapify(A, 0);
 
 	//Return min id
 	return root;
 }
 
-
+// Decreases node's weight
 void Decrease_key(Type_Heap *Q, int i, double new_val)
 {
 	Q->MPQ[i].key = new_val;
@@ -92,11 +108,14 @@ void Decrease_key(Type_Heap *Q, int i, double new_val)
 	while(i!=0 && Q->MPQ[(i-1)/2].key > Q->MPQ[i].key)
 	{
 		swap(Q , &Q->MPQ[i], &Q->MPQ[(i-1)/2]);
+
+		//Acces parent node 
 		i = (i-1)/2;
 	}
 
 }
 
+// Prim's algorithm default initialization
 void Init_sng_src(Graph* G)
 {
 	// Vertices's key, parent and B_queue initialization 
@@ -108,6 +127,7 @@ void Init_sng_src(Graph* G)
 	}
 }
 
+// Graph's initialization subroutine
 Graph* Init_graph(unsigned int size)
 {	
 	// Graph's memory creation and node_head setting from List_Node for each element of array Vertex
@@ -128,6 +148,7 @@ Graph* Init_graph(unsigned int size)
 	return G;
 }
 
+// Edge's updating subroutine
 void Graph_updater(Graph* G, 
 				   unsigned int v1,
 				   unsigned int v2,
@@ -153,10 +174,16 @@ void Graph_updater(Graph* G,
 // Turns Graph to Min prior queue
 Type_Heap* MPQ_creator(Graph* G, unsigned int r)
 {	
+	// Queue's allocation
+
 	Type_Heap *Q = (Type_Heap*) malloc(sizeof(Type_Heap));
 	Q->size = G->size;
 	Q->MPQ = (Heap_node*) malloc(Q->size*sizeof(Heap_node));
 	Q->position = (unsigned int*) malloc(Q->size*sizeof(unsigned int));
+
+	/* Set each vertex in queue's
+	(each vertex which index is 
+	the same as its position in the queue, at beginning)*/
 
 	for(unsigned int i=0; i<Q->size; i++)
 	{
@@ -165,16 +192,22 @@ Type_Heap* MPQ_creator(Graph* G, unsigned int r)
 		Q->position[i] = i;
 	}
 
+	// Set algorithm's source as queue's root
 	swap(Q, &Q->MPQ[0], &Q->MPQ[r-1]);
 
 	return Q;
 }
 
+// Free subroutines
+
 void Free_graph(Graph *G)
 {
-	for(unsigned int i=0; i<G->size; i++){
+	// Acces each node from linked list
+	for(unsigned int i=0; i<G->size; i++)
+	{
 		List_Node *Aux = G->Vertex[i].head;
 		List_Node *next;
+
 		// Free Vertex's linked list
 		while(Aux != NULL){
 			next = Aux->next;
@@ -183,17 +216,25 @@ void Free_graph(Graph *G)
 		}
 		free(Aux);
 	}
+
 	//Free Vertex array
 	free(G->Vertex);
+
 	//Free B_queue array
 	free(G->B_queue);
+
 	//Free G Graph
 	free(G);
 }
 
 void Free_queue(Type_Heap *Q)
 {
+	// Free Heap nodes
 	free(Q->MPQ);
+
+	// Free position array
 	free(Q->position);
+
+	// Free queue
 	free(Q);
 }
