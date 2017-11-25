@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Graph.h"
 #include "Freq_prog.h"
 #include "Dijkstra_prog.h"
 #include "Prim_prog.h"
-#include "Graph.h"
 #include "IO.h"
 
 // Main program (argc and argv as parameter, used for reading)
@@ -19,12 +19,12 @@ int main(int argc, char* argv[]){
 	//Graph's size
 	unsigned int size;
 	
-	//Root's index
+	//Root's id
 	unsigned int r;
 
 	/*Verify command type
 	(if program get less than two commands in terminal for frequence
-	 , it don't uses source index)*/
+	 , it don't uses source id)*/
 	if ( argc > 2){
 		r = atoi(argv[2]);
 	}
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
 	unsigned int end = 0;
 	
 	/* Verify commnad type(if number of commands greater than 3  
-	in terminal, the program set end vertex's index for distance computation, 
+	in terminal, the program set end vertex's id for distance computation, 
 	else program doesn't computes distance).
 	*/
 	
@@ -89,6 +89,9 @@ int main(int argc, char* argv[]){
 
 		//Frequence printing
 		printFreq(dfd_list, total);
+
+		// DFD free
+		freeDFD(dfd_list);
 	}
 	else
 	{
