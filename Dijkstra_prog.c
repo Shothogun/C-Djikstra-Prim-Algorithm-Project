@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include "Dijkstra_prog.h"
 #include "Graph.h"
+#include "Dijkstra_prog.h"
 
 // Relax subroutine
 void Relax(Graph *G, List_Node *v, unsigned int i)
@@ -14,7 +14,7 @@ void Relax(Graph *G, List_Node *v, unsigned int i)
 	}
 }
 
-/* Get graph and root vertex's index as argument*/
+/* Get graph and root vertex's id as argument*/
 
 
 void Dijkstra(Graph *G, unsigned int r)
@@ -31,7 +31,7 @@ void Dijkstra(Graph *G, unsigned int r)
 	// Main loop(until all vertices are analyzed)
 	while (Q->size != 0)
 	{
-		// Extract min key vertex from queue returning its index
+		// Extract min key vertex from queue returning its id
 		int i = Extract_min(Q);
 
 		// Set vertex's flag as out of queue
@@ -56,7 +56,7 @@ void Dijkstra(Graph *G, unsigned int r)
 			}
 		}
 	}
-	
+
 	// Free queue
 	Free_queue(Q);
 }
