@@ -73,9 +73,10 @@ typedef struct Type_Heap
 
 	// Vertex position in queue(array)
 	unsigned int* position;
-	
+
 } Type_Heap;
 
+// Graph's subroutines
 
 Heap_node* Parent(Type_Heap* A, unsigned int i);
 Heap_node* Left(Type_Heap* A, unsigned int i);
